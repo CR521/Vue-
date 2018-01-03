@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>内置指令</title>
+		<style type="text/css">
+			[v-cloak]{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="app1" v-cloak>
+			{{message}}
+		</div>
+		<div class="app2">
+			<span v-once>{{message}}</span>
+			<div v-once>
+				<span>{{message}}</span>
+			</div>
+		</div>
+		<div class="app3">
+			<p v-if="status===1">当status为1时显示该行</p>
+			<p v-else-if="status===2">当status为2时显示该行</p>
+			<p v-else>否则显示该行</p>
+		</div>
+		<div class="app4">
+			<template v-if="status===1">
+				<p>这是一段文本哦</p>
+				<p>这是一段文本哦</p>
+				<p>这是一段文本哦</p>
+			</template>
+		</div>
+		<div class="app5">
+			<template v-if="type==='name'">
+				<label for="">用户名：</label>
+				<input type="" name="" id="" value="" placeholder="输入用户名" key="name-input" />
+			</template>
+			<template v-else>
+				<label for="">邮箱：</label>
+				<input type="" name="" id="" value="" placeholder="输入邮箱" key="mail-input" />
+			</template>
+			<button @click="handleToggleClick">切换输入类型</button>
+		</div>
+		<div class="app6">
+			<p v-show="status===1">当status为1时显示该行</p>
+		</div>
+		<div class="app7">
+			<ul>
+				<li v-for="book in books">{{book.name}}</li>
+			</ul>
+		</div>
+		<div class="app8">
+			<ul>
+				<li v-for="(book,index) of books">{{index}}-{{book.name}}</li>
+			</ul>
+		</div>
+		<div class="app9">
+			<ul>
+				<template v-for="book in books">
+					<li>书名：{{book.name}}</li>
+					<li>作者：{{book.author}}</li>
+				</template>
+			</ul>
+			<span v-for="(value,key,index) in user">{{index}}-{{key}}-{{value}}</span>
+			<span v-for="n in 10">{{n}}</span>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			var app1=new Vue({
+				el:'.app1',
+				data:{
+					message:'这是一段文本'
+				}
+			});
+			var app2=new Vue({
+				el:'.app2',
+				data:{
+					message:'这是一段文本'
+				}
+			});
+			var app3=new Vue({
+				el:'.app3',
+				data:{
+					status:1
+				}
+			});
+			var app4=new Vue({
+				el:'.app4',
+				data:{
+					status:1
+				}
+			});
+			var app5=new Vue({
+				el:'.app5',
+				data:{
+					type:'name'
+				},
+				methods:{
+					handleToggleClick:function(){
+						this.type=this.type==='name'?'mail':'name';
+					}
+				}
+			});
+			var app6=new Vue({
+				el:'.app6',
+				data:{
+					status:1
+				}
+			});
+			var app7=new Vue({
+				el:'.app7',
+				data:{
+					books:[
+						{name:'《Vue.js实战》'},
+						{name:'《JavaScript语言精粹》'},
+						{name:'《JavaScript高级程序设计》'}
+					]
+				}
+			});
+			var app8=new Vue({
+				el:'.app8',
+				data:{
+					books:[
+						{name:'《Vue.js实战》'},
+						{name:'《JavaScript语言精粹》'},
+						{name:'《JavaScript高级程序设计》'}
+					]
+				}
+			});
+			var app9=new Vue({
+				el:'.app9',
+				data:{
+					books:[
+						{name:'《Vue.js实战》',author:'梁灏'},
+						{name:'《JavaScript语言精粹》',author:'Douglas Crockford'},
+						{name:'《JavaScript高级程序设计》',author:'Nicholas C.Zakas'}
+					],
+					user:{
+						name:'Nancy',
+						gender:'女',
+						age:24
+					}
+				}
+			});
+			//push只能加一个
+			app9.books.push({
+				name:'CSS揭秘',
+				author:'[希] Lea Verou'
+			});
+			app9.books=app9.books.filter(function(item){
+				return item.name.match(/JavaScript/);
+			});
+
+		</script>
+	</body>
+</html>

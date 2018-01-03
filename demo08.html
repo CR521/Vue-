@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>表单与v-model</title>
+	</head>
+	<body>
+		<div class="app1">
+			<input type="text" v-model="message" placeholder="输入..." />
+			<p>输入的内容是：{{message}}</p>
+		</div>
+		<!-- 当中文输入法时，没有选定词组也能实时显示，用@input -->
+		<div class="app2">
+			<input type="text" @input="handleInput" placeholder="输入..." />
+			<p>输入的内容是：{{message}}</p>
+			
+		</div>
+		
+		<!-- 单选按钮在单独使用时，不需要v-model,直接使用v-bind绑定一个布尔类型的值，为真选中 -->
+		<div class="app3">
+			<input type="radio" name="" id="button1" value="" :checked="picked" />
+			<label for="button1">单选按钮</label>
+		</div>
+		
+		<!-- 如果是组合使用来实现互斥选择的效果，就需要v-model配合value来使用 -->
+		<div class="app4">
+			<input type="radio" name="" id="html" value="html" v-model="picked" />
+			<label for="html">HTML</label>
+			<br />
+			<input type="radio" name="" id="js" value="js" v-model="picked" />
+			<label for="js">JS</label>
+			<br />
+			<input type="radio" name="" id="css" value="css" v-model="picked" />
+			<label for="css">CSS</label>
+			<br />
+			<p>选择的项是：{{picked}}</p>
+		</div>
+		
+		<!-- 复选框也分单独使用和组合使用，复选框单独使用时也是用v-model来绑定一个布尔值 -->
+		<div class="app5">
+			<input type="checkbox" name="checked" id="checked" value="" v-model="checked" />
+			<label for="checked">选择状态：{{checked}}</label>
+		</div>
+		<!-- 组合复选框  -->
+		<div class="app6">
+			<input type="checkbox" name="" id="html" value="html" v-model="checked" />
+			<label for="html">HTML</label>
+			<br />
+			<input type="checkbox" name="" id="js" value="js" v-model="checked" />
+			<label for="js">JS</label>
+			<br />
+			<input type="checkbox" name="" id="css" value="css" v-model="checked" />
+			<label for="css">CSS</label>
+			<br />
+			<p>选择的项是：{{checked}}</p>
+		</div>
+		
+		<!-- 选择列表单选实例  -->
+		<!-- 书上说如果没有value的值，会直接匹配<option>的text，但好像并没有 -->
+		<div class="app7">
+			<select name="" v-model="selected">
+				<option value="">html</option>
+				<option value="js">JS</option>
+				<option value="">CSS</option>
+			</select>
+			<p>选择的项是：{{selected}}</p>
+		</div>
+		<!-- 给<selected>添加属性multiple就可以多选了 -->
+		<!-- 试了一下发现很丑，而且好像下拉列表多选没意义吧，再点击时也不能多选 -->
+		<div class="app8">
+			<select name="" v-model="selected" multiple>
+				<option value="html">html</option>
+				<option value="js">JS</option>
+				<option value="css">CSS</option>
+			</select>
+			<p>选择的项是：{{selected}}</p>
+		</div>
+		<div class="app9">
+			<select name="" v-model="selected">
+				<option v-for="option in options" :value="option.value">{{option.text}}</option>
+			</select>
+			<p>选择的项是：{{selected}}</p>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			var app1=new Vue({
+				el:'.app1',
+				data:{
+					message:''
+					
+				}
+			});
+			var app2=new Vue({
+				el:'.app2',
+				data:{
+					message:''
+				},
+				methods:{
+					handleInput:function(e){
+						this.message=e.target.value;
+					}
+				}
+			});
+			var app3=new Vue({
+				el:'.app3',
+				data:{
+					picked:true
+				}
+			});
+			var app4=new Vue({
+				el:'.app4',
+				data:{
+					picked:'js'
+				}
+			});
+			var app5=new Vue({
+				el:'.app5',
+				data:{
+					checked:false
+				}
+			});
+			var app6=new Vue({
+				el:'.app6',
+				data:{
+					checked:['html','css']
+				}
+			});
+			var app7=new Vue({
+				el:'.app7',
+				data:{
+					selected:'html'
+				}
+			});
+			var app8=new Vue({
+				el:'.app8',
+				data:{
+					selected:['html','js']
+				}
+			});
+			var app9=new Vue({
+				el:'.app9',
+				data:{
+					selected:'html',
+					options:[
+						{
+							text:'HTML',
+							value:'html'
+						},
+						{
+							text:'JavaScript',
+							value:'js'
+						},
+						{
+							text:'CSS',
+							value:'css'
+						}
+					]
+				}
+			})
+		</script>
+	</body>
+</html>
+

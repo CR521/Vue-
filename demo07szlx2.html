@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>实战：利用计算属性、指令等知识开发购物车</title>
+		<link rel="stylesheet" href="css/demo07sz.css" />
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<template v-if="list.length">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>商品名称</th>
+							<th>商品单价</th>
+							<th>购物数量</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+						<template v-for="(item,index) in list">
+					
+						
+							<template v-for="(item1,index1) in item">
+									
+									<tr>
+									<td>{{index1 +1}}</td>
+									<td>{{item1.name}}</td>
+									<td>{{item1.price}}</td>
+									<td>
+										<button @click="handleReduce(item1)":disabled="item1.count===1">-</button>
+										{{item1.count}}
+										<button @click="handleAdd(item1)">+</button>
+									</td>
+									<td>
+										<button @click="handleRemove(index1,index)">移除</button>
+									</td>
+								</tr>
+								
+							</template>
+						
+						</template>	
+						
+					</tbody>
+				</table>
+				<div>总价：￥{{totalPrice}}</div>
+			</template>
+			<div v-else>购物车为空</div>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script src="js/demo07sz2.js"></script>
+	</body>
+</html>

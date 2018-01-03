@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>组件与复用</title>
+	</head>
+	<div class="app1">
+		<my-component></my-component>
+	</div>
+	<div class="app2">
+		<my-component></my-component>
+	</div>
+	<div class="app3">
+		<table>
+			<tbody is="my-component"></tbody>
+		</table>
+	</div>
+	
+	<div class="app4">
+		<my-component1></my-component1>
+	</div>
+	
+	<div class="app5">
+		<my-component2></my-component2>
+		<my-component2></my-component2>
+		<my-component2></my-component2>
+	</div>
+	
+	<!-- 改进,这样就达到了复用的目的，3个按钮互不影响  -->
+	<div class="app6">
+		<my-component3></my-component3>
+		<my-component3></my-component3>
+		<my-component3></my-component3>
+	</div>
+	<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+	<script>
+		Vue.component('my-component',{
+			template:'<div>这里是组件的内容</div>'
+		});
+		var app1=new Vue({
+			el:'.app1'
+		});
+		var Child={
+			template:'<div>局部注册组件的内容</div>'
+		}
+		var app2=new Vue({
+			el:'.app2',
+			components:{
+				'my-component':Child
+			}
+		});
+		var app3=new Vue({
+			el:'.app3'
+		});
+		Vue.component('my-component1',{
+			template:'<div>{{message}}</div>',
+			data:function(){
+				return {
+					message:'这是个很厉害的组件'
+				}
+			}
+		});
+		var app4=new Vue({
+			el:'.app4'
+		});
+		
+		var data={
+			counter:0
+		};
+		Vue.component('my-component2',{
+			template:'<button @click="counter++">{{counter}}</button>',
+			data:function(){
+				return data;
+			}
+		});
+		var app5=new Vue({
+			el:'.app5'
+		});
+		
+		
+		Vue.component('my-component3',{
+			template:'<button @click="counter++">{{counter}}</button>',
+			data:function(){
+				return {counter:0};
+			}
+		});
+		var app6=new Vue({
+			el:'.app6'
+		});
+		
+	</script>
+	<body>
+	</body>
+</html>

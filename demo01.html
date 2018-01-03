@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>数据绑定和第一个Vue应用</title>
+	</head>
+	<body>
+		<div id="app">
+			<input type="text" v-model="name" placeholder="你的名字" />
+			<h1>你好，{{name}}</h1>
+		</div>
+		<div class="app2">
+			{{book}}
+		</div>
+		<div class="app3">
+			{{date}}
+		</div>
+		<div class="app4">
+			<span v-html='link'></span>
+		</div>
+		<div class="app5">
+			{{number / 10}}
+			{{isOk?'确定':'取消'}}
+			{{text.split(',').reverse().join(',')}}
+		</div>
+		<div class="app6">
+			{{date|formatDate}}
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			var myname="Nancy";
+			var app=new Vue({
+				el:'#app',
+				data:{
+					name:myname
+				}
+			});
+			
+			var app2=new Vue({
+				el:'.app2',
+				data:{
+					book:"《假如给我三天光明》",
+					why:"插值与表达式"
+				}
+			});
+			var app3=new Vue({
+				el:'.app3',
+				data:{
+					date:new Date()
+				},
+				mounted:function(){
+					var _this=this;
+					this.timer=setInterval(function(){
+						_this.date=new Date();
+					},1000);
+				},
+				beforeDestroy:function(){
+					if(this.timer){
+						clearInterval(this.timer);
+					}
+				}
+			});
+			var app4=new Vue({
+				el:'.app4',
+				data:{
+					link:'<a href="#">这是一个链接哦</a>'
+				}
+			});
+			var app5=new Vue({
+				el:'.app5',
+				data:{
+					number:100,
+					isOk:false,
+					text:'123,456',
+					why:"vue.js只支持单个表达式，不支持语句和流控制"
+				}
+			});
+			var padDate=function(value){
+				return value<10?'0'+value:value;
+			};
+			var app6=new Vue({
+				el:'.app6',
+				data:{
+					date:new Date(),
+					why:"过滤器"
+				},
+				filters:{
+					formatDate:function(value){
+						var date=new Date(value);
+						var year=date.getFullYear();
+						var month=padDate(date.getMonth()+1);
+						var day=padDate(date.getDate());
+						var hours=padDate(date.getHours());
+						var minutes=padDate(date.getMinutes());
+						var seconds=padDate(date.getSeconds());
+						return year+'-'+month+'-'+day+' '+hours+':'+minutes+':'+seconds;
+					},
+					
+				},
+				mounted:function(){
+					var _this=this;
+					this.timer=setInterval(function(){
+						_this.date=new Date();
+					},1000);
+				},
+				beforeDestory:function(){
+					if(this.timer){
+						clearInterval(this.timer);
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

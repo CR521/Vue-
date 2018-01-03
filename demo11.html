@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>使用props传递数据</title>
+	</head>
+	<body>
+		<div class="app1">
+			<my-component1 message="来自父组件的数据"></my-component>
+		</div>
+		
+		<div class="app2">
+			<my-component2 warning-text="提示信息"></my-component2>
+		</div>
+		
+		<!-- 动态绑定props的值，传递来的数据是父级的动态数据 -->
+		<div class="app3">
+			<input type="text" name="" id="" value="" v-model="parentMessage" />
+			<my-component3 :message="parentMessage"></my-component>
+		</div>
+		
+		<!-- 注意，如果直接传递数字、布尔值、数组、对象,而且不实用v-bind，传递的仅仅是字符串 -->
+		<div class="app4">
+			<my-component4 message="[1,2,3]"></my-component4>
+			<my-component4 :message="[1,2,3]"></my-component4>
+		</div>
+		
+		<!-- 单向数据流 -->
+		<div class="app5">
+			<my-component5 :init-count="1"></my-component5>
+		</div>
+		
+		<div class="app6">
+			<my-component6 :width="100"></my-component6>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			Vue.component('my-component1',{
+				props:['message'],
+				template:'<div>{{message}}</div>'
+			});
+			var app1=new Vue({
+				el:'.app1'
+			});
+			Vue.component('my-component2',{
+				props:['warningText'],
+				template:'<div>{{warningText}}</div>'
+			});
+			var app2=new Vue({
+				el:'.app2'
+			});
+			
+			Vue.component('my-component3',{
+				props:['message'],
+				template:'<div>{{message}}</div>'
+			});
+			var app3=new Vue({
+				el:'.app3',
+				data:{
+					parentMessage:''
+				}
+			});
+			
+			Vue.component('my-component4',{
+				props:['message'],
+				template:'<div>{{message.length}}</div>'
+			});
+			var app4=new Vue({
+				el:'.app4',
+			});
+			
+			Vue.component('my-component5',{
+				props:['initCount'],
+				template:'<div @click="click()">{{count}}</div>',
+				data:function(){
+					return {
+						count:this.initCount
+					}
+				},
+				methods:{
+					click:function(){
+						this.count++;
+					}
+				}
+			});
+			var app5=new Vue({
+				el:'.app5'
+			});
+			
+			Vue.component('my-component6',{
+				props:['width'],
+				template:'<div :style="style">组件内容</div>',
+				computed:{
+					style:function(){
+						return {
+							width:this.width+'px'
+						}
+					}
+				}
+			});
+			var app6=new Vue({
+				el:'.app6'
+			})
+		</script>
+	</body>
+</html>

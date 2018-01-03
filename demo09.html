@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>绑定值/修饰符</title>
+	</head>
+	<body>
+		<div class="app1">
+			<input type="radio" name="" id="" :value="value" v-model="picked" />
+			<label for="">单选按钮</label>
+			<p>{{picked}}</p>
+			<p>{{value}}</p>
+		</div>
+		
+		<div class="app2">
+			<input type="checkbox" v-model="toggle" :true-value='value1' :false-value="value2" />
+			<label for="">复选框</label>
+			<p>{{toggle}}</p>
+			<p>{{value1}}</p>
+			<p>{{value2}}</p>
+		</div>
+		
+		<div class="app3">
+			<select name="" v-model="selected">
+				<option :value="{number:123}">123</option>
+			</select>
+			{{selected.number}}
+		</div>
+		<!-- 这时的message不是实时更新的，而是在失焦或按回车时才更新 -->
+		<div class="app4">
+			<input type="text" name="" id="" value="" v-model.lazy="message"/>
+			<p>{{message}}</p>
+		</div>
+		
+		<div class="app5">
+			<input type="text" name="" id="" value="" v-model.number="message"/>
+			<p>{{typeof message}}</p>
+		</div>
+		
+		<div class="app6">
+			<input type="text" name="" id="" value="" v-model.trim="message"/>
+			<p>{{message}}</p>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			var app1=new Vue({
+				el:'.app1',
+				data:{
+					picked:false,
+					value:123
+				}
+			});
+			var app2=new Vue({
+				el:'.app2',
+				data:{
+					toggle:false,
+					value1:'a',
+					value2:'b'
+				}
+			});
+			var app3=new Vue({
+				el:'.app3',
+				data:{
+					selected:''
+				}
+			});
+			var app4=new Vue({
+				el:'.app4',
+				data:{
+					message:''
+				}
+			});
+			var app5=new Vue({
+				el:'.app5',
+				data:{
+					message:'123'
+				}
+				
+			});
+			var app6=new Vue({
+				el:'.app6',
+				data:{
+					message:''
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>v-bind 及class与 style绑定</title>
+		<style type="text/css">
+			.active{
+				color:blueviolet;
+				border: 2px solid #00f;
+			}
+			.error{
+				color:red;
+			}
+			.static{
+				background: #0f0;
+			}
+			.btn{
+				outline: dashed;
+			}
+			.btn-large{
+				background:#ddd ;
+			}
+			.btn-disabled{
+				text-decoration:underline ;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="app1">
+			<div :class="{'active':isActive}">我真的是黑色的！</div>
+		</div>
+		<div class="app2">
+			<div class="static" :class="classes">我本来是黑色的……</div>
+		</div>
+		<div class="app3">
+			<div :class="[isActive ? activeCls:' ',errorCls]">三元表达式</div>
+		</div>
+		<div class="app4">
+			<div :class="[{'active':isActive},errorCls,classes]">我看看</div>
+		</div>
+		
+		
+		<div class="app5">
+			<div :style="{'color':color,'fontSize':fontSize+'px'}">文本</div>
+		</div>
+		<div class="app6">
+			<div :style="styles">文本</div>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			var app1=new Vue({
+				el:'.app1',
+				data:{
+					isActive:true
+				}
+			});
+			var app2=new Vue({
+				el:'.app2',
+				data:{
+					isActive:true,
+					error:null
+				},
+				computed:{
+					classes:function(){
+						return {
+							active:this.isActive && !this.error,
+							'text-fail':this.error && this.error.type==='fail'
+						}
+					}
+				}
+			});
+			var app3=new Vue({
+				el:'.app3',
+				data:{
+					isActive:true,
+					activeCls:'active',
+					errorCls:'error'
+				}
+			});
+			var app4=new Vue({
+				el:'.app4',
+				data:{
+					isActive:true,
+					errorCls:'error',
+					size:'large',
+					disabled:true
+				},
+				computed:{
+					classes:function(){
+						return [
+							'btn',
+							{
+								['btn-'+this.size]:this.size!=='',
+								['btn-disabled']:this.disabled
+							}
+						]
+					}
+				}
+			});
+			
+			var app5=new Vue({
+				el:'.app5',
+				data:{
+					color:'red',
+					fontSize:14
+				}
+			});
+			var app6=new Vue({
+				el:'.app6',
+				data:{
+					styles:{
+						color:'red',
+						fontSize:14+'px'
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

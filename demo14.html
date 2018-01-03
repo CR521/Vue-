@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>组件高级用法</title>
+	</head>
+	<body>
+		<!-- 组件在它的模版内可以递归的调用自己，只要给组件设置name的选项就可以了  -->
+		<!-- 设置name后，在组件模版内就可以递归使用了，不过需要注意的是，必须给一个条件来限制递归数量 -->
+		<div class="app1">
+			<child-component1 :count="1"></child-component1>
+		</div>
+		
+		<!-- 内联模版 -->
+		<!-- 组件的模版一般都是在template选项内定义的，Vue提供了一个内联模版的功能，在使用组件时
+			给组件标签使用 inline-template 特性，组件就会把它的内容当作模版，而不是把它当内容分发出去
+		-->
+		<div class="app2">
+			<child-component2 inline-template>
+				<div>
+					<h2>在父组件中定义子组件的模版</h2>
+					<p>{{message}}</p>
+					<p>{{msg}}</p>
+				</div>
+			</child-component2>
+		</div>
+		
+		<!-- 动态组件 -->
+		<!-- Vue提供了一个特殊的元素<component>用来动态的挂在不同的组件，使用is特性来选择要挂载的组件 -->
+		<div class="app3">
+			<component :is="currentView"></component>
+			<button @click="handleChangeView('A')">切换到A</button>
+			<button @click="handleChangeView('B')">切换到B</button>
+			<button @click="handleChangeView('C')">切换到C</button>
+		</div>
+		<!-- 动态的改变currentView的值就可以动态挂载组件了。也可以直接绑定在组件对象上： -->
+		<div class="app4">
+			<component :is="currentView"></component>
+		</div>
+		
+		<!-- 异步组件  -->
+		<div class="app5">
+			<child-component5></child-component5>
+		</div>
+		
+		<!-- $nextTick -->
+		<div class="app6">
+			<div id="div" v-if="showDiv">这好似一段文本</div>
+			<button @click="getText">获取div内容</button>
+		</div>
+		
+		<!-- X-Templates -->
+		<div class="app7">
+			<my-component7></my-component>
+			<script type="text/x-template" id="my-component7">
+				<div>这是组件内容</div>
+			</script>
+		</div>
+		
+		<!-- 手动挂载实例 -->
+		<div id="mount-div">
+			
+		</div>
+		
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			Vue.component('child-component1',{
+				name:'child-component1',
+				props:{
+					count:{
+						type:Number,
+						default:1
+					}
+				},
+				template:'\
+				<div class="child">\
+					<child-component1 \
+						:count="count + 1"\
+						v-if="count < 3"></child-component1>\
+				</div>\
+				'
+			});
+			var app1=new Vue({
+				el:'.app1',
+			});
+			Vue.component('child-component2',{
+				data:function(){
+					return {
+						msg:'在子组件声明的数据'
+					}
+				}
+			});
+			var app2=new Vue({
+				el:'.app2',
+				data:{
+					message:"在父组件声明的数据"
+				}
+			});
+			var app3=new Vue({
+				el:'.app3',
+				components:{
+					comA:{
+						template:'<div>组件A</div>'
+					},
+					comB:{
+						template:'<div>组件B</div>'
+					},
+					comC:{
+						template:'<div>组件C</div>'
+					}
+				},
+				data:{
+					currentView:'comA'
+				},
+				methods:{
+					handleChangeView:function(component){
+						this.currentView='com'+component;
+					}
+				}
+			});
+			var home={
+				template:'<p>Welcome home!</p>'
+			};
+			var app4=new Vue({
+				el:'.app4',
+				data:{
+					currentView:home
+				}
+			});
+			Vue.component('child-component5',function(resolve,reject){
+				window.setTimeout(function(){
+					resolve({
+						template:'<div>我是异步渲染的</div>'
+					});
+				},2000);
+			});
+			var app5=new Vue({
+				el:'.app5'
+			});
+			var app6=new Vue({
+				el:'.app6',
+				data:{
+					showDiv:false
+				},
+				methods:{
+					getText:function(){
+						this.showDiv=true;
+						this.$nextTick(function(){
+							var text=document.getElementById('div').innerHTML;
+							console.log(text);
+						});
+						
+					}
+				}
+			});
+			Vue.component('my-component7',{
+				template:'#my-component7'
+			});
+			var app7=new Vue({
+				el:'.app7'
+			});
+			
+			var MyComponent=Vue.extend({
+				template:'<div>Hello:{{name}}</div>',
+				data:function(){
+					return {
+						name:'Nancy'
+					}
+				}
+			});
+			new MyComponent().$mount('#mount-div');
+		</script>
+	</body>
+</html>
