@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Render函数3</title>
+	</head>
+	<body>
+		<!-- 在Render函数中，不再需要Vue内置的指令，比如：v-if\v-for ，当然，也没办法使用他们。
+			无论要实现什么功能，都可以用原生JavaScript。比如v-if、v-else可以这样写：
+		-->
+		<div id="app1">
+			<ele :show="show"></ele>
+			<button @click="show=!show">切换 show</button>
+		</div>
+		
+		<!-- 对于v-for，可以用一个简单的for循环来实现 -->
+		<div id="app2">
+			<el :list="list"></el>
+		</div>
+		
+		<!-- 展示JavaScript的if、else语句和数组map方法充分配合使用来渲染一个列表  -->
+		<div id="app3">
+			<elem :list="list"></elem>
+			<button @click="handleClick">显示列表</button>
+		</div>
+		
+		<!-- Render函数里也没有与v-model对应的API，需要自己来实现逻辑 -->
+		<div id="app4">
+			<elemen></elemen>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script>
+			Vue.component('ele',{
+				render:function(createElement){
+					if(this.show){
+						return createElement('p','show 的值为true');
+					}else{
+						return createElement('p','show的值为false');
+					}
+				},
+				props:{
+					show:{
+						type:Boolean,
+						default:false
+					}
+				}
+			});
+			var app1=new Vue({
+				el:'#app1',
+				data:{
+					show:false
+				}
+			});
+			
+			Vue.component('el',{
+				render:function(createElement){
+					var nodes=[];
+					for (var i=0;i<this.list.length;i++){
+						nodes.push(createElement('p',this.list[i].name));
+					}
+					return createElement('div',nodes);
+				},
+				props:{
+					list:{
+						type:Array
+					}
+				}
+			});
+			var app2=new Vue({
+				el:'#app2',
+				data:{
+					list:[
+						{name:'《Vue.js实战》'},
+						{name:'《JavaScript语言精粹》'},
+						{name:'《JavaScript高级程序设计》'}
+					]
+				}
+			});
+			
+			Vue.component('elem',{
+				render:function(createElement){
+					if(this.list.length){
+						return createElement('ul',this.list.map(function(item){
+							return createElement('li',item.name);
+						}));
+					}else{
+						return createElement('p','列表为空');
+					}
+				},
+				props:{
+					list:{
+						type:Array,
+						default:function(){
+							return [];
+						}
+					}
+				}
+			});
+			
+			var app3=new Vue({
+				el:'#app3',
+				data:{
+					list:[]
+				},
+				methods:{
+					handleClick:function(){
+						if(this.list.length===0){
+							this.list=[
+								{name:'《Vue.js实战》'},
+								{name:'《JavaScript语言精粹》'},
+								{name:'《JavaScript高级程序设计》'}
+							]
+						}else{
+							this.list=[];
+						}
+					}
+				}
+			});
+			
+			Vue.component('elemen',{
+				render:function(createElement){
+					var _this=this;
+					return createElement('div',[
+						createElement('input',{
+							domProps:{
+								value:this.value
+							},
+							on:{
+								input:function(event){
+									_this.value=event.target.value;
+								}
+							}
+						}),
+						createElement('p','value:'+this.value)
+					])
+				},
+				data:function(){
+					return {
+						value:''
+					}
+				}
+			});
+			var app4=new Vue({
+				el:'#app4'
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>调查问卷</title>
+	</head>
+	<body>
+		<div id="app">
+			<template v-if="que===1">
+				<p>1.请问您的性别是：</p>
+				<input type="radio" name="sex" id="m" value="m" v-model="ans1" @change="changeAns(ans1,$event)" />
+				<label for="m">男</label>
+				<input type="radio" name="sex" id="w" value="w" v-model="ans1"  @change="changeAns(ans1,$event)"/>
+				<label for="w">女</label>
+				<input type="radio" name="sex" id="no" value="n" v-model="ans1" @change="changeAns(ans1,$event)" />
+				<label for="no">保密</label>
+			</template>
+			<template v-else-if="que===2">
+				<p>2.请选择您的兴趣爱好：</p>
+				<input type="checkbox" name="hobby" id="book" value="book" @click="changeBox" v-model="ans2"/>
+				<label for="book">看书</label>
+				<input type="checkbox" name="hobby" id="swim" value="swim" @click="changeBox" v-model="ans2"/>
+				<label for="swim">游泳</label>
+				<input type="checkbox" name="hobby" id="run" value="run" @click="changeBox" v-model="ans2"/>
+				<label for="run">跑步</label>
+				<input type="checkbox" name="hobby" id="movie" value="movie" @click="changeBox" v-model="ans2"/>
+				<label for="movie">看电影</label>
+				<input type="checkbox" name="hobby" id="music" value="music" @click="changeBox" v-model="ans2"/>
+				<label for="music">听音乐</label>
+			</template>
+			<template v-else>
+				<p>3.请介绍一下自己：</p>
+				<textarea name="" rows="10" cols="" placeholder="不少于100字" v-model="ans3" ></textarea>
+			</template>
+			<btns v-model="que" :ans1="ans1" :ans2="ans2" :ans3="ans3" ></btns>
+		</div>
+		
+		<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+		<script src="quest.js"></script>
+		<script src="index.js"></script>
+	</body>
+</html>
